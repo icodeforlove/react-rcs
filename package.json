@@ -1,0 +1,17 @@
+{
+  "name": "react-rcs",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "src/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.10.0"
+  }
+}
