@@ -4,3 +4,6 @@
 [submodule "react-rcs-bower"]
 	path = react-rcs-bower
 	url = https://github.com/icodeforlove/react-rcs-bower
+[submodule "react-rcs-example"]
+	path = react-rcs-example
+	url = https://github.com/icodeforlove/react-rcs-example
