@@ -1,0 +1,6 @@
+[submodule "grunt-react-rcs"]
+	path = grunt-react-rcs
+	url = https://github.com/icodeforlove/grunt-react-rcs
+[submodule "react-rcs-bower"]
+	path = react-rcs-bower
+	url = https://github.com/icodeforlove/react-rcs-bower
