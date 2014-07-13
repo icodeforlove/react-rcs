@@ -62,7 +62,7 @@ We recommand that you seperate your RCS from your components so you can compile 
 
 ## In browser transformations
 
-You can take use in browser transformations like this just make sure to include the `RCSTransformer.js` file
+You can take use in browser transformations like this just make sure use `rcs-with-transformer.js` instead of `rcs.js`
 
 ```sass
 <style type="text/rcs">
