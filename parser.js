@@ -15,8 +15,8 @@ function parseRCS (rcs) {
 	rcs = rcs.replace(/\/\*[\S\s]*?\*\//gim, '');
 
 	// add quotes
-	rcs = rcs.replace(/([\@a-z0-9-.:][a-z0-9-.:\s]*)(?:\s+)?:\s*(.+);/gi, '"$1": "$2";');
-	rcs = rcs.replace(/([\@a-z0-9-.:][a-z0-9%-.:\s\[\]\=\'\",]*?)(?:\s*)([\{\[])/gi, '"$1": $2');
+	rcs = rcs.replace(/([\@a-z0-9\-\.\:\*][a-z0-9\-\.\:\s\*]*)(?:\s+)?:\s*(.+);/gi, '"$1": "$2";');
+	rcs = rcs.replace(/([\@a-z0-9\-\.\:\*][a-z0-9\%\-\.\:\s\*\[\]\=\'\"\,]*?)(?:\s*)([\{\[])/gi, '"$1": $2');
 
 	// remove unnessary white spaces
 	//rcs = rcs.replace(/\n|\t/g, '');
