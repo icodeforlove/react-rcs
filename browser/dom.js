@@ -55,6 +55,8 @@ function addClassPrefixToNode (node, displayName, _isChild) {
 		props.children.forEach(function (node) {
 			addClassPrefixToNode(node, displayName, true);
 		});
+	} else if (typeof props.children === 'object') {
+		addClassPrefixToNode(props.children, displayName, true);
 	} else if (props.children && props.children._store) {
 		addClassPrefixToNode(props.children, displayName, true);
 	}
