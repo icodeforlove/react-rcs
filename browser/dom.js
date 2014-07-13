@@ -20,9 +20,9 @@ function addClassPrefixToNode (node, displayName, _isChild) {
 	var props = node.props,
 		prefix = 'react-' + toHyphenDelimited(displayName);
 
-	if (props.class) {
+	if (props.classes) {
 		// precompute class names
-		props.class = props.class.split(' ').map(function (className) {
+		props.classes = props.classes.split(' ').map(function (className) {
 			// replace state shorthand
 			className = className.replace(/^\:\:\:/, 'state-');
 			return className;
@@ -30,21 +30,21 @@ function addClassPrefixToNode (node, displayName, _isChild) {
 	}
 
 	// modify class strings
-	if (props.class && !_isChild) {
-		props.class = ['react-view', prefix, addClassPrefixToClassString(prefix, props.class)].join(' ');
-	} else if (props.class && _isChild) {
-		props.class = addClassPrefixToClassString(prefix, props.class);
-	} else if (!props.class && !_isChild) {
-		props.class = 'react-view ' + prefix;
+	if (props.classes && !_isChild) {
+		props.classes = ['react-view', prefix, addClassPrefixToClassString(prefix, props.classes)].join(' ');
+	} else if (props.classes && _isChild) {
+		props.classes = addClassPrefixToClassString(prefix, props.classes);
+	} else if (!props.classes && !_isChild) {
+		props.classes = 'react-view ' + prefix;
 	}
 
 	// add to className
-	if (props.className && props.class) {
-		props.className += ' ' + props.class;
-	} else if (!props.className && props.class) {
-		props.className = props.class;
+	if (props.className && props.classes) {
+		props.className += ' ' + props.classes;
+	} else if (!props.className && props.classes) {
+		props.className = props.classes;
 	}
-	delete props.class;
+	delete props.classes;
 
 	if (typeof props.children === 'string') {
 		return;
