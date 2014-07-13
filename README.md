@@ -37,7 +37,7 @@ view {
 
 we will render this component like this
 
-<div class="react-view react-app"><a class="react-app-link"></a></div>
+<div class="react-view react-header"><a class="react-header_link"></a></div>
 
 and we will transform the RCS into this
 
@@ -47,11 +47,11 @@ and we will transform the RCS into this
 	background: blue;
 }
 
-.react-view.react-header .react-header-link:hover {
+.react-view.react-header .react-header_link:hover {
 	color: blue;
 }
 
-.react-view.react-header .react-header-link {
+.react-view.react-header .react-header_link {
 	color: red;
 }
 ```
