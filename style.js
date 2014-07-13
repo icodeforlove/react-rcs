@@ -12,7 +12,7 @@ function Style (displayName, style, options) {
 	
 	this.displayName = displayName;
 
-	this._prefix = 'react-' + toHyphenDelimited(displayName) + '-';
+	this._prefix = 'react-' + toHyphenDelimited(displayName) + '_';
 	
 	this._selectorPrefix = '.react-view.' + this._prefix.substr(0, this._prefix.length-1) + ' ';
 

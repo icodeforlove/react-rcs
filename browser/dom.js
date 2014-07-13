@@ -3,7 +3,7 @@
 var toHyphenDelimited = require('../utils/toHyphenDelimited');
 
 function addPrefixToClassName (prefix, className) {
-	return prefix + '-' + toHyphenDelimited(className);
+	return prefix + '_' + toHyphenDelimited(className);
 }
 
 function addClassPrefixToClassString (prefix, classString) {

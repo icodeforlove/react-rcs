@@ -28,7 +28,7 @@ describe('The Style', function() {
 			}
 		});
 
-		expect(style.toString()).toBe('.react-view.react-test .react-test-item {opacity:1;}');
+		expect(style.toString()).toBe('.react-view.react-test .react-test_item {opacity:1;}');
 	});
 
 	it('can transform multiple selectors', function () {
@@ -39,9 +39,9 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-item1 {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item2 {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item3 {opacity:1;}'
+			'.react-view.react-test .react-test_item1 {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item2 {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item3 {opacity:1;}'
 		);
 	});
 
@@ -61,15 +61,15 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-item1 {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item1 .react-test-first-child {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item1 .react-test-first-child .react-test-second-child {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item2 {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item2 .react-test-first-child {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item2 .react-test-first-child .react-test-second-child {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item3 {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item3 .react-test-first-child {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item3 .react-test-first-child .react-test-second-child {opacity:1;}'
+			'.react-view.react-test .react-test_item1 {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item1 .react-test_first-child {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item1 .react-test_first-child .react-test_second-child {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item2 {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item2 .react-test_first-child {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item2 .react-test_first-child .react-test_second-child {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item3 {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item3 .react-test_first-child {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item3 .react-test_first-child .react-test_second-child {opacity:1;}'
 		);
 	});
 
@@ -89,9 +89,9 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-item {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item .react-test-item1 {opacity:1;}\n' +
-			'.react-view.react-test .react-test-item .react-test-item1 .react-test-item2 {opacity:1;}'
+			'.react-view.react-test .react-test_item {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item .react-test_item1 {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item .react-test_item1 .react-test_item2 {opacity:1;}'
 		);
 	});
 
@@ -112,7 +112,7 @@ describe('The Style', function() {
 
 		expect(style.toString()).toBe(
 			'.react-view.react-test:hover {opacity:1;}\n'+
-			'.react-view.react-test .react-test-item:hover {opacity:1;}'
+			'.react-view.react-test .react-test_item:hover {opacity:1;}'
 		);
 	});
 
@@ -126,7 +126,7 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-item:hover {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item:hover {opacity:1;}\n' +
 			'.react-view.react-test:hover {opacity:1;}'
 		);
 	});
@@ -141,7 +141,7 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-item:hover:active {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item:hover:active {opacity:1;}\n' +
 			'.react-view.react-test:hover:active {opacity:1;}'
 		);
 	});	
@@ -156,7 +156,7 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test.react-test-state-active {opacity:1;}'
+			'.react-view.react-test.react-test_state-active {opacity:1;}'
 		);
 	});	
 
@@ -168,7 +168,7 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test.react-test-state-active {opacity:1;}'
+			'.react-view.react-test.react-test_state-active {opacity:1;}'
 		);
 	});
 
@@ -188,9 +188,9 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-level-one {opacity:0;}\n' +
-			'.react-view.react-test .react-test-level-one .react-test-level-two {opacity:0;}\n' +
-			'.react-view.react-test.react-test-state-active .react-test-level-one .react-test-level-two {opacity:1;}'
+			'.react-view.react-test .react-test_level-one {opacity:0;}\n' +
+			'.react-view.react-test .react-test_level-one .react-test_level-two {opacity:0;}\n' +
+			'.react-view.react-test.react-test_state-active .react-test_level-one .react-test_level-two {opacity:1;}'
 		);
 	});	
 
@@ -212,9 +212,9 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test.react-test-state-active.react-test-state-visible .react-test-level-one .react-test-level-two {opacity:1;}\n' +
-			'.react-view.react-test.react-test-state-visible .react-test-level-one {opacity:0;}\n' +
-			'.react-view.react-test.react-test-state-visible .react-test-level-one .react-test-level-two {opacity:0;}'
+			'.react-view.react-test.react-test_state-active.react-test_state-visible .react-test_level-one .react-test_level-two {opacity:1;}\n' +
+			'.react-view.react-test.react-test_state-visible .react-test_level-one {opacity:0;}\n' +
+			'.react-view.react-test.react-test_state-visible .react-test_level-one .react-test_level-two {opacity:0;}'
 		);
 	});	
 
@@ -238,9 +238,9 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test.react-test-state-active.react-test-state-visible .react-test-level-one .react-test-level-two {opacity:1;}\n' +
-			'.react-view.react-test.react-test-state-visible .react-test-level-one {opacity:0;}\n' +
-			'.react-view.react-test.react-test-state-visible .react-test-level-one .react-test-level-two {opacity:0;}'
+			'.react-view.react-test.react-test_state-active.react-test_state-visible .react-test_level-one .react-test_level-two {opacity:1;}\n' +
+			'.react-view.react-test.react-test_state-visible .react-test_level-one {opacity:0;}\n' +
+			'.react-view.react-test.react-test_state-visible .react-test_level-one .react-test_level-two {opacity:0;}'
 		);
 	});	
 
@@ -252,7 +252,7 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-item1.react-test-item2.react-test-item3 {opacity:0;}'
+			'.react-view.react-test .react-test_item1.react-test_item2.react-test_item3 {opacity:0;}'
 		);
 	});	
 
@@ -276,10 +276,10 @@ describe('The Style', function() {
 		});
 
 		expect(style.toString()).toBe(
-			'.react-view.react-test .react-test-item1.react-test-item2.react-test-item3 {opacity:0;}\n' +
-			'.react-view.react-test .react-test-item1.react-test-item2.react-test-item3 .react-test-level-one {opacity:0;}\n' +
-			'.react-view.react-test .react-test-item1.react-test-item2.react-test-item3 .react-test-level-one .react-test-level-two {opacity:0;}\n' +
-			'.react-view.react-test .react-test-item1.react-test-item2.react-test-item3 .react-test-level-one .react-test-level-two:hover {opacity:1;}'
+			'.react-view.react-test .react-test_item1.react-test_item2.react-test_item3 {opacity:0;}\n' +
+			'.react-view.react-test .react-test_item1.react-test_item2.react-test_item3 .react-test_level-one {opacity:0;}\n' +
+			'.react-view.react-test .react-test_item1.react-test_item2.react-test_item3 .react-test_level-one .react-test_level-two {opacity:0;}\n' +
+			'.react-view.react-test .react-test_item1.react-test_item2.react-test_item3 .react-test_level-one .react-test_level-two:hover {opacity:1;}'
 		);
 	});	
 });
