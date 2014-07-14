@@ -20,9 +20,9 @@ function parseRCS (rcs, name) {
 	rcs = rcs.replace(/;(?!\s+\n)/, ';\r\n');
 
 	// add quotes
-	rcs = rcs.replace(/([\@a-z0-9\-\.\:\*][a-z0-9\-\.\:\s\*]*)(?:\s+)?:\s*(.+);/gi, '"$1": "$2";');
-	rcs = rcs.replace(/([\@a-z0-9\-\.\:\*][a-z0-9\%\-\.\:\s\*\[\]\=\'\"\,\(\)]*?)(?:\s*)([\{\[])/gi, '"$1": $2');
-	
+	rcs = rcs.replace(/([\@a-z0-9\-\_\.\:\*\#][a-z0-9\-\_\.\:\s\*\[\]\=\'\"\,\(\)\#]*)(?:\s+)?:\s*(.+);/gi, '"$1": "$2";');
+	rcs = rcs.replace(/((?:[\@a-z0-9\-\_\.\:\*\#\>\[\]])(?:[a-z0-9\%\-\_\+\.\:\s\*\[\]\=\'\"\,\(\)\#\\\>\~]+)?)(?:\s+)?([\{\[])/gi, '"$1": $2');
+
 	// remove unnessary white spaces
 	//rcs = rcs.replace(/\n|\t/g, '');
 
@@ -40,10 +40,36 @@ function parseRCS (rcs, name) {
 	rcs = rcs.replace(/\r\n/, '');
 
 	try {
-		return jsonlint.parse(rcs);
+		var object = jsonlint.parse(rcs);
+		for (var property in object) {
+			if (property.trim() !== property) {
+				object[property.trim()] = object[property];
+				delete object[property];
+			}
+		}
+
+		return trimPropertyNames(object);
 	} catch (error) {
+		
 		handleError(error, original, name);
 	}
+}
+
+function trimPropertyNames (object) {
+	for (var property in object) {
+		var trimmed = property.trim();
+
+		if (trimmed !== property) {
+			object[trimmed] = typeof object[property] === 'object' ? trimPropertyNames(object[property]) : object[property];
+			delete object[property];
+		}
+
+		if (typeof object[trimmed] === 'object') {
+			trimPropertyNames(object[trimmed]);
+		}
+	}
+
+	return object;
 }
 
 function handleError(error, original, name) {
