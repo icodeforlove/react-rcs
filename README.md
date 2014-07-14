@@ -114,7 +114,33 @@ or
 <link rel="stylesheet/rcs" type="text/css" href="style.rcs" component="Header">
 ```
 
-also if you are using JSX with harmony, you can define the syles when you create your class
+or
+
+```javascript
+var Header = React.createClass({
+	render: function () {
+		return <div><a class="link"></a></div>;
+	},
+
+	style: {
+		view: {
+			height: '50px',
+			background: 'blue'
+		},
+
+		'.link': {
+			color: 'red',
+
+			':hover': {
+				color: 'blue'
+			}
+		}
+	}
+});
+
+```
+
+or if you are using JSX with harmony
 
 ```javascript
 var Header = React.createClass({
