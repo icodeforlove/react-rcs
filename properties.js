@@ -31,7 +31,7 @@ function transform (name, value) {
 	var results = [];
 
 	propertyTransforms.forEach(function (transform) {
-		if (transform.property !== name) {
+		if (!name.match(transform.property)) {
 			return;
 		}
 
@@ -53,10 +53,10 @@ function transform (name, value) {
 	return results;
 }
 
-// register defaults
-registerProperty('background', function (name, value) {
-	var matches = value.match(/url\(['"]*(.+?)['"]*\)/);
-	
+// handle all properties that support url
+registerProperty(/^(?:list-style|list-style-image|content|cursor|border-image|border-image-source|background|background-image|src)$/, function (name, value) {
+	var matches = value.match(/url\(['"]?(.+?)['"]?\)/);
+
 	if (!matches || !baseUrl) {
 		return;
 	}
