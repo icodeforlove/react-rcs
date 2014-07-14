@@ -350,4 +350,39 @@ describe('The Style', function() {
 			'.react-view.react-test .react-test_child-one[name="test"] .react-test_child-two[name] {opacity:1;}'
 		);
 	});
+
+	it('can resolve multiple references to the same selector', function () {
+		var style = new Style('Test', {
+			'.one': {
+				width: '100px'
+			},
+
+			'.one, .two': {
+				opacity: 1
+			}
+		});
+
+		expect(style.toString()).toBe(
+			'.react-view.react-test .react-test_one {opacity:1;width:100px;}\n' +
+			'.react-view.react-test .react-test_two {opacity:1;}'
+		);
+	});
+
+	it('can resolve multiple references to the same selector (nested)', function () {
+		var style = new Style('Test', {
+			'view': {
+				':hover': {
+					width: '100px'
+				}
+			},
+
+			'view:hover': {
+				opacity: 1
+			}
+		});
+
+		expect(style.toString()).toBe(
+			'.react-view.react-test:hover {opacity:1;width:100px;}'
+		);
+	});
 });

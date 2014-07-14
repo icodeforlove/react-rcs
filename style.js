@@ -61,7 +61,11 @@ Style.prototype = {
 				var bufferRulesKeys = Object.keys(rulesBuffer.rules);
 				bufferRulesKeys.sort();
 				bufferRulesKeys.forEach(function (key) {
-					this.rules[key] = rulesBuffer.rules[key];
+					if (this.rules[key]) {
+						this.rules[key] = rulesBuffer.rules[key].concat(this.rules[key]);
+					} else {
+						this.rules[key] = rulesBuffer.rules[key];
+					}
 				}, this);
 				for (var animation in rulesBuffer.animations) {
 					this.animations[animation] = rulesBuffer.animations[animation];
