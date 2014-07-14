@@ -4,6 +4,8 @@ Component specific styles for react!
 
 React solved the issue with organizing DOM components, but it was still missing a clean way to manage component specific styling.
 
+Heres a [fiddle example](http://jsfiddle.net/icodeforlove/pn2g6/), note that in production you should be using `.rcs` files and not doing everything inline.
+
 # How?
 
 With RCS your CSS rules are scoped specificly to the component you're working on.
