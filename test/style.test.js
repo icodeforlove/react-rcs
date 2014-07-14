@@ -282,4 +282,72 @@ describe('The Style', function() {
 			'.react-view.react-test .react-test_item1.react-test_item2.react-test_item3 .react-test_level-one .react-test_level-two:hover {opacity:1;}'
 		);
 	});	
+
+	it('can transform "parent > child" selectors', function() {
+		var style = new Style('Test', {
+			'.level-one > .level-two': {
+				opacity: 1
+			}
+		});
+
+		expect(style.toString()).toBe(
+			'.react-view.react-test .react-test_level-one > .react-test_level-two {opacity:1;}'
+		);
+	});
+
+	it('can transform nested "parent > child" selectors', function() {
+		var style = new Style('Test', {
+			'.level-one': {
+				opacity: 1,
+
+				'> .level-two': {
+					opacity: 1,
+
+					'> .level-three': {
+						opacity: 1
+					}
+				}
+			}
+		});
+
+		expect(style.toString()).toBe(
+			'.react-view.react-test .react-test_level-one {opacity:1;}\n' +
+			'.react-view.react-test .react-test_level-one > .react-test_level-two {opacity:1;}\n' +
+			'.react-view.react-test .react-test_level-one > .react-test_level-two > .react-test_level-three {opacity:1;}'
+		);
+	});
+
+	it('can transform ~ selectors', function () {
+		var style = new Style('Test', {
+			'.item-one': {
+				opacity: 1,
+
+				'~ .item-two': {
+					opacity: 1
+				}
+			}
+		});
+
+		expect(style.toString()).toBe(
+			'.react-view.react-test .react-test_item-one {opacity:1;}\n' +
+			'.react-view.react-test .react-test_item-one ~ .react-test_item-two {opacity:1;}'
+		);
+	});
+
+	it('can transform [attribute=value] selectors', function () {
+		var style = new Style('Test', {
+			'.child-one[name="test"]': {
+				opacity: 1,
+
+				'.child-two[name]': {
+					opacity: 1
+				}
+			}
+		});
+
+		expect(style.toString()).toBe(
+			'.react-view.react-test .react-test_child-one[name="test"] {opacity:1;}\n' +
+			'.react-view.react-test .react-test_child-one[name="test"] .react-test_child-two[name] {opacity:1;}'
+		);
+	});
 });

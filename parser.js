@@ -1,6 +1,14 @@
 'use strict';
 
-var jsonlint = require('jsonlint/lib/jsonlint');
+var jsonlint = require('./jsonlint');
+
+// node doesnt support atob/btoa
+var atob = typeof atob === 'undefined' && typeof Buffer !== 'undefined' ? function atob (string) {
+	return new Buffer(string, 'base64').toString('utf8');
+} : atob;
+var btoa = typeof btoa === 'undefined' && typeof Buffer !== 'undefined' ? function (string) {
+	return new Buffer(string).toString('base64');
+} : btoa;
 
 /**
  * Parses a RCS string to a JSON object.
@@ -9,25 +17,33 @@ function parseRCS (rcs, name) {
 	var original = rcs;
 
 	rcs = '{\n' + rcs + '\n}';
-	
 	rcs = rcs.replace(/"/g, '\\"');
 
 	// strip comments
 	rcs = rcs.replace(/^[\t]+\/\/.+$/gim, '');
 	rcs = rcs.replace(/\/\*[\S\s]*?\*\//gim, '');
 
-	// we're kind of cheating here using a \r\n as a placeholder
+	// handle properties on the same line (we're kind of cheating here using a \r\n as a placeholder)
 	rcs = rcs.replace(/;(?!\s+\n)/, ';\r\n');
 
 	// add quotes
-	rcs = rcs.replace(/([\@a-z0-9\-\_\.\:\*\#][a-z0-9\-\_\.\:\s\*\[\]\=\'\"\,\(\)\#]*)(?:\s+)?:\s*(.+);/gi, '"$1": "$2";');
-	rcs = rcs.replace(/((?:[\@a-z0-9\-\_\.\:\*\#\>\[\]])(?:[a-z0-9\%\-\_\+\.\:\s\*\[\]\=\'\"\,\(\)\#\\\>\~]+)?)(?:\s+)?([\{\[])/gi, '"$1": $2');
+	rcs = rcs.replace(/([\@a-z0-9\-\_\.\:\*\#][a-z0-9\-\_\.\:\s\*\[\]\=\'\"\,\(\)\#]*)(?:\s+)?:\s*(.+);/gi, function (match, name, value) {
+		// because were encoding the value there is no reason to escape it
+		value = value.replace(/\\"/g, '"');
 
-	// remove unnessary white spaces
-	//rcs = rcs.replace(/\n|\t/g, '');
+		// base64 the value because of JSON's inability to support unicode
+		value = btoa(value);
+		return '"' + name + '":"' + value + '";';
+	});
+	rcs = rcs.replace(/((?:[\@a-z0-9\-\_\.\:\*\#\>\[\]])(?:[a-z0-9\%\-\_\+\.\:\s\*\[\]\=\'\"\,\(\)\#\\\>\~]+)?)(?:\s+)?([\{\[])/gi, function (match, selector, openingBracket) {
+		// couldnt figure out a way to do this in the regexp
+		selector = selector.trim();
 
-	// default number values to pixels
-	//rcs = rcs.replace(/(\d+)(?!\d)(?!%|px)/gi, '$1px');
+		// base64 the selector because of JSON's inability to support unicode
+		selector = btoa(selector);
+		
+		return '"' + selector + '": ' + openingBracket;
+	});
 
 	// add commas
 	rcs = rcs.replace(/\}(?!\s*[\}\]]|$)/g, '},');
@@ -40,32 +56,23 @@ function parseRCS (rcs, name) {
 	rcs = rcs.replace(/\r\n/, '');
 
 	try {
-		var object = jsonlint.parse(rcs);
-		for (var property in object) {
-			if (property.trim() !== property) {
-				object[property.trim()] = object[property];
-				delete object[property];
-			}
-		}
-
-		return trimPropertyNames(object);
+		return unencodeObject(jsonlint.parse(rcs));
 	} catch (error) {
 		
 		handleError(error, original, name);
 	}
 }
 
-function trimPropertyNames (object) {
+function unencodeObject (object) {
 	for (var property in object) {
-		var trimmed = property.trim();
-
-		if (trimmed !== property) {
-			object[trimmed] = typeof object[property] === 'object' ? trimPropertyNames(object[property]) : object[property];
+		if (typeof object[property] === 'object') {
+			var decodedProperty = atob(property);
+			object[decodedProperty] = object[property];
 			delete object[property];
-		}
 
-		if (typeof object[trimmed] === 'object') {
-			trimPropertyNames(object[trimmed]);
+			object[decodedProperty] = unencodeObject(object[decodedProperty]);
+		} else if (typeof object[property] === 'string') {
+			object[property] = atob(object[property]);
 		}
 	}
 

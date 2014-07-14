@@ -14,8 +14,5 @@
     "grunt-contrib-watch": "~0.6.1",
     "grunt-jasmine-node": "~0.2.1",
     "browserify": "~4.2.0"
-  },
-  "dependencies": {
-    "jsonlint": "^1.6.0"
   }
 }

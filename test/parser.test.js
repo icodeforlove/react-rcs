@@ -124,7 +124,6 @@ describe('The Parser', function() {
       }', this.description);
     
     var root = result['@keyframes name'];
-    
     expect(!!root).toBe(true);
     expect(!!root['0%']).toBe(true);
     expect(root['0%'].opacity).toBe('1');
@@ -132,5 +131,43 @@ describe('The Parser', function() {
     expect(root['50%'].opacity).toBe('.5');
     expect(!!root['100%']).toBe(true);
     expect(root['100%'].opacity).toBe('0');
+  });
+
+  it('can parse escaped unicode characters', function() {
+    var result = Parser.parseRCS('\
+      view{\n\
+        content: "\\f081";\n\
+      }', this.description);
+    
+    var root = result.view;
+    
+    expect(!!root).toBe(true);
+    expect(root.content).toBe('"\\f081"');
+  });
+
+  it('can parse escaped unicode characters', function() {
+    var result = Parser.parseRCS('\
+      view{\n\
+        content: "❥";\n\
+      }', this.description);
+    
+    var root = result.view;
+    
+    expect(!!root).toBe(true);
+    expect(root.content).toBe('"❥"');
+  });
+
+  it('can parse unicode in selector', function() {
+    var result = Parser.parseRCS('\
+      @media screen and min-width 0 \\0{\n\
+        view{\n\
+          opacity: 1;\n\
+        }\n\
+      }', this.description);
+    
+    var root = result['@media screen and min-width 0 \\0'];
+    expect(!!root).toBe(true);
+    expect(!!root.view).toBe(true);
+    expect(root.view.opacity).toBe('1');
   });
 });
