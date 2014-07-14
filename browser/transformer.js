@@ -38,7 +38,7 @@ if (typeof React !== 'undefined') {
 
 function processRCSSource (source, name) {
 	var css = '';
-	var rcs = Parser.parseRCS(source);
+	var rcs = Parser.parseRCS(source, name);
 
 	for (var selector in rcs) {
 		if (selector.match(/\@component/)) {

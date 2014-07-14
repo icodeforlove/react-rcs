@@ -35,7 +35,7 @@ Style.prototype = {
 		} else if (typeof style === 'string') {
 			try {
 
-				rules = Parser.parseRCS(style);
+				rules = Parser.parseRCS(style, this.displayName);
 			} catch (error) {
 				throw new Error('Parsing component ' + this.displayName + '\n' + error);
 			}

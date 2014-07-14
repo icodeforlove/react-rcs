@@ -9,8 +9,8 @@ describe('The Parser', function() {
   it('can parse an empty view', function() {
     var result = Parser.parseRCS('\
       view {\n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result.view).toBe(true);
   });
 
@@ -18,8 +18,8 @@ describe('The Parser', function() {
     var result = Parser.parseRCS('\
       view{\n\
         width:1px;\n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result.view).toBe(true);
     expect(result.view.width).toBe('1px');
   });
@@ -28,8 +28,8 @@ describe('The Parser', function() {
     var result = Parser.parseRCS('\
       view {\n\
         width: 1px;\n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result.view).toBe(true);
     expect(result.view.width).toBe('1px');
   });
@@ -38,8 +38,8 @@ describe('The Parser', function() {
     var result = Parser.parseRCS('\
       .box {\n\
         width: 1px;\n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result['.box']).toBe(true);
     expect(result['.box'].width).toBe('1px');
   });
@@ -48,8 +48,8 @@ describe('The Parser', function() {
     var result = Parser.parseRCS('\
       .box:hover {\n\
         width: 1px;\n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result['.box:hover']).toBe(true);
     expect(result['.box:hover'].width).toBe('1px');
   });
@@ -58,8 +58,8 @@ describe('The Parser', function() {
     var result = Parser.parseRCS('\
       .box:hover::before {\n\
         width: 1px;\n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result['.box:hover::before']).toBe(true);
     expect(result['.box:hover::before'].width).toBe('1px');
   });
@@ -71,8 +71,8 @@ describe('The Parser', function() {
         .box {\n\
           width: 1px;\n\
         }\n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result.view).toBe(true);
     expect(result.view.width).toBe('1px');
     expect(!!result.view['.box']).toBe(true);
@@ -83,8 +83,8 @@ describe('The Parser', function() {
     var result = Parser.parseRCS('\
       @media (min-width: 700px) and (orientation: landscape) {\n\
         \n\
-      }'
-    );
+      }', this.description);
+    
     expect(!!result['@media (min-width: 700px) and (orientation: landscape)']).toBe(true);
   });
 
@@ -97,8 +97,8 @@ describe('The Parser', function() {
             width: 1px;\n\
           }\n\
         }\n\
-      }'
-    );
+      }', this.description);
+    
     var root = result['@media (min-width: 700px) and (orientation: landscape)'];
 
     expect(!!root).toBe(true);
@@ -109,6 +109,7 @@ describe('The Parser', function() {
   });
 
   it('can parse keyframe animations', function() {
+
     var result = Parser.parseRCS('\
       @keyframes name {\n\
         0% {\n\
@@ -120,8 +121,8 @@ describe('The Parser', function() {
         100% {\n\
           opacity: 0;\n\
         }\n\
-      }'
-    );
+      }', this.description);
+    
     var root = result['@keyframes name'];
     
     expect(!!root).toBe(true);
