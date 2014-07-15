@@ -46,19 +46,19 @@ function addClassPrefixToNode (node, displayName, _isChild) {
 	}
 	delete props.classes;
 
-	if (typeof props.children === 'string') {
-		return;
+	// continue walking the node tree
+	if (props.children && props.children !== 'string') {
+		traverseDOMTree(displayName, props.children);
 	}
+}
 
-	// traverse children
-	if (Array.isArray(props.children)) {
-		props.children.forEach(function (node) {
-			addClassPrefixToNode(node, displayName, true);
+function traverseDOMTree (displayName, item) {
+	if (Array.isArray(item)) {
+		item.forEach(function (item) {
+			traverseDOMTree(displayName, item);
 		});
-	} else if (typeof props.children === 'object') {
-		addClassPrefixToNode(props.children, displayName, true);
-	} else if (props.children && props.children._store) {
-		addClassPrefixToNode(props.children, displayName, true);
+	} else if (item && item.props) {
+		addClassPrefixToNode(item, displayName, true);
 	}
 }
 
