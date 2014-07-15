@@ -6,7 +6,7 @@ React solved the issue with organizing DOM components, but it was still missing 
 
 # Demo / Example
 
-- [live demo](http://jsfiddle.net/icodeforlove/pn2g6/embedded/result%2Cjs/)
+- [live demo](http://jsfiddle.net/icodeforlove/pn2g6/embedded/result%2Ccss%2Cjs/)
 - [example project](https://github.com/icodeforlove/react-rcs-example)
 
 # How?
