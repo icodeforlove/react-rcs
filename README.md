@@ -4,7 +4,10 @@ Component specific styles for react!
 
 React solved the issue with organizing DOM components, but it was still missing a clean way to manage component specific styling.
 
-Heres a [fiddle example](http://jsfiddle.net/icodeforlove/pn2g6/), note that in production you should be using `.rcs` files and not doing everything inline.
+# Demo / Example
+
+- [live demo](http://jsfiddle.net/icodeforlove/pn2g6/embedded/result%2Cjs/)
+- [example project](https://github.com/icodeforlove/react-rcs-example)
 
 # How?
 
