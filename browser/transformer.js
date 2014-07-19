@@ -71,6 +71,12 @@ contentLoaded(window, function () {
 	});
 });
 
+window.React.RCS = {
+	Style: Style,
+	Properties: StyleSheet,
+	Parser: Parser
+};
+
 exports.Style = Style;
 exports.StyleSheet = StyleSheet;
 exports.Properties = Properties;
