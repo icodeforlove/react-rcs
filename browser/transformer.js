@@ -3,38 +3,19 @@
 var React = window.React,
 	Style = require('../style'),
 	StyleSheet = require('./stylesheet'),
-	DOM = require('./dom'),
 	Properties = require('../properties'),
 	Parser = require('../parser'),
 	contentLoaded = require('./contentLoaded'),
-	sendRequest = require('./sendRequest');
+	sendRequest = require('./sendRequest'),
+	wrappedCreateClass = require('./wrappedCreateClass');
 
 // initializes ReactStyle, mainly used for adding mixins
-if (typeof window.RCSPropertiesInit !== 'undefined') {
-	window.RCSPropertiesInit(Properties);
+if (typeof React.RCSPropertiesInit !== 'undefined') {
+	React.RCSPropertiesInit(Properties);
+	delete React.RCSPropertiesInit;
 }
 
-if (typeof React !== 'undefined') {
-	React.createClass = (function (createClass) {
-		return function (spec) {
-			if (spec.style) {
-				StyleSheet.addStyle(new Style(spec.displayName, spec.style));
-				StyleSheet.writeStyles();
-
-				delete spec.style;
-			}
-
-			var render = spec.render;
-			spec.render = function () {
-				var node = render.apply(this, arguments);
-				DOM.addClassPrefixToNode(node, spec.displayName);
-				return node;
-			};
-
-			return createClass(spec);
-		};
-	})(React.createClass);
-}
+React.createClass = wrappedCreateClass(React.createClass);
 
 function processRCSSource (source, name) {
 	var css = '';
