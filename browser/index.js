@@ -1,6 +1,6 @@
 'use strict';
 
-var React = window.React,
+var React = require('react'),
 	DOM = require('./dom');
 
 if (typeof React !== 'undefined') {

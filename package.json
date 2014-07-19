@@ -1,12 +1,15 @@
 {
   "name": "react-rcs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Component specific styles for react!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Chad Scira <chadvscira@gmail.com>",
+  "author": {
+    "name": "Chad Scira",
+    "email": "chadvscira@gmail.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "grunt-contrib-jshint": "~0.10.0",
@@ -14,5 +17,9 @@
     "grunt-contrib-watch": "~0.6.1",
     "grunt-jasmine-node": "~0.2.1",
     "browserify": "~4.2.0"
+  },
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "react": "~0.11.0"
   }
 }
