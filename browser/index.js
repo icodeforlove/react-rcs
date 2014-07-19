@@ -1,19 +1,26 @@
 'use strict';
 
-var React = require('react'),
-	DOM = require('./dom');
+var DOM = require('./dom');
 
-if (typeof React !== 'undefined') {
-	React.createClass = (function (createClass) {
-		return function (spec) {
-			var render = spec.render;
-			spec.render = function () {
-				var node = render.apply(this, arguments);
-				DOM.addClassPrefixToNode(node, spec.displayName);
-				return node;
-			};
-
-			return createClass(spec);
+var wrappedCreateClass = function (createClass) {
+	return function (spec) {
+		var render = spec.render;
+		spec.render = function () {
+			var node = render.apply(this, arguments);
+			DOM.addClassPrefixToNode(node, spec.displayName);
+			return node;
 		};
-	})(React.createClass);
+
+		return createClass(spec);
+	};
+};
+
+// are we in a browser where React is already defined?
+if (typeof React !== 'undefined') {
+	React.createClass = wrappedCreateClass(React.createClass);	
 }
+
+// export for node
+module.exports = function (React) {
+	React.createClass = wrappedCreateClass(React.createClass);
+};

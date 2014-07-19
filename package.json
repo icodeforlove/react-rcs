@@ -18,8 +18,5 @@
     "grunt-jasmine-node": "~0.2.1",
     "browserify": "~4.2.0"
   },
-  "readmeFilename": "README.md",
-  "dependencies": {
-    "react": "~0.11.0"
-  }
+  "readmeFilename": "README.md"
 }
