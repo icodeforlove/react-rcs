@@ -3,8 +3,7 @@
 var wrappedCreateClass = require('./wrappedCreateClass');
 
 window.React.RCS = {
-	Style: require('../style'),
-	Properties: require('../properties'),
-	Parser: require('../parser')
+	Properties: require('../properties')
 };
-window.React.createClass = wrappedCreateClass(window.React.createClass);	
+
+window.React.createClass = wrappedCreateClass(window.React.createClass);
