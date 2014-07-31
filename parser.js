@@ -10,6 +10,121 @@ var btoa = typeof btoa === 'undefined' && typeof Buffer !== 'undefined' ? functi
 	return new Buffer(string).toString('base64');
 } : btoa;
 
+var variableRegExp = /\$([a-z0-9\-_]+)/ig,
+	singleVariableRegExp = /\$([a-z0-9\-_]+)/i,
+	variableDefineRegExp = /\$([a-z0-9\-_]+): ([^;]+);/ig,
+	functionDefinitionRegExp = /\@define ([a-z0-9\-_]+) \(([^\(\)]+)\) \$\{\{([\s\S]+)\}\}\$/,
+	codeRegExp = /\$\{\{([\s\S]+)\}\}\$/igm,
+	codeReturnRegExp = /\$\{([^\{\}]+)\}\$/ig,
+	functionDefinitionCallRegExp = /\@([a-z0-9\-_]+)\(([^\(\)]+)\)/ig,
+	variables = {},
+	functions = {};
+
+// ${3 + this.functions.add(4) + 6}$
+// ${{
+
+// }}$
+
+function processVariableDefintions (string) {
+	return string.replace(variableDefineRegExp, function (string, name, value) {
+		var varMatch = value.match(singleVariableRegExp);
+
+		if (varMatch) {
+			value = variables[varMatch[1]];
+			if (!value) {
+				return string;
+			}
+		}
+
+		if (variables[name] !== undefined) {
+			throw new Error('RCS DuplicateVariableDefinition: "$' + name + '" has already been defined');
+		}
+
+		variables[name] = value;
+		return '';
+	});
+} 
+
+function processVariables (string) {
+	return string.replace(variableRegExp, function (string, name) {
+		if (variables[name] === undefined) {
+			throw new Error('RCS ReferenceError: "$' + name + '" is not defined');
+		}
+		return variables[name];
+	});
+}
+
+function processInlineFunctions (string) {
+	return string.replace(codeRegExp, function (string, code) {
+		try {
+			code = eval('(function () {' +  code + '})').call({
+				variables: variables,
+				functions: functions
+			});
+		} catch (error) {
+			error.code = code;
+			throw error;
+		}
+
+		return code;
+	});
+}
+
+function processInlineReturnFunctions (string) {
+	return string.replace(codeReturnRegExp, function (string, code) {
+		try {
+			code = eval('(function () {return ' + code + '})').call({
+				variables: variables,
+				functions: functions
+			});
+		} catch (error) {
+			error.code = code;
+			throw error;
+		}
+
+		return code;
+	});
+}
+
+
+function processFunctionDefinitions (string) {
+	return string.replace(functionDefinitionRegExp, function (string, name, args, code) {
+		if (functions[name] !== undefined) {
+			throw new Error('RCS DuplicateFunctionDefinition: "' + name + '" has already been defined');
+		}
+
+		try {
+			functions[name] = eval('(function () { return function (' + args + ') {' + code + '} })()').bind({
+				variables: variables,
+				functions: functions
+			});
+		} catch (error) {
+			error.code = code;
+			throw error;
+		}
+
+		return '';
+	});
+}
+
+function processFunctionDefinitionCall (string) {
+	return string.replace(functionDefinitionCallRegExp, function (string, name, args) {
+		args = args.split(',').map(function (arg) {
+			arg = arg.trim();
+
+			var number = parseFloat(arg, 10);
+
+			if (number == arg) {
+				return number;
+			} else {
+				return arg;
+			}
+		});
+		
+		return functions[name].apply(null, args);
+	});
+}
+
 /**
  * Parses a RCS string to a JSON object.
  */
@@ -17,6 +132,13 @@ function parseRCS (rcs, name) {
 	var original = rcs;
 
 	rcs = '{\n' + rcs + '\n}';
+
+	rcs = processFunctionDefinitions(rcs);
+	rcs = processVariableDefintions(rcs);
+	rcs = processVariables(rcs);
+	rcs = processInlineFunctions(rcs);
+	rcs = processInlineReturnFunctions(rcs);
+
 	rcs = rcs.replace(/"/g, '\\"');
 
 	// strip comments
@@ -30,6 +152,9 @@ function parseRCS (rcs, name) {
 	rcs = rcs.replace(/([\@a-z0-9\-\_\.\:\*\#][a-z0-9\-\_\.\:\s\*\[\]\=\'\"\,\(\)\#]*)(?:\s+)?:\s*(.+);/gi, function (match, name, value) {
 		// because were encoding the value there is no reason to escape it
 		value = value.replace(/\\"/g, '"');
+
+		// check if property value makes a function definition call
+		value = processFunctionDefinitionCall(value);
 
 		// base64 the value because of JSON's inability to support unicode
 		value = btoa(value);
@@ -125,4 +250,6 @@ function handleError(error, original, name) {
 	throw new Error(message);
 }
 
+exports.variables = variables;
+exports.functions = functions;
 exports.parseRCS = parseRCS;

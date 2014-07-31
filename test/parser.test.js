@@ -170,4 +170,142 @@ describe('The Parser', function() {
     expect(!!root.view).toBe(true);
     expect(root.view.opacity).toBe('1');
   });
+
+  it('can parse variables', function() {
+    var result = Parser.parseRCS('\
+      $color: #ffffff;\n\
+      \
+      view{\n\
+        color: $color;\n\
+      }\
+      ', this.description);
+
+    var root = result.view;
+    expect(!!root).toBe(true);
+    expect(root.color).toBe('#ffffff');
+  });
+
+  it('can parse variables refrencing variables', function() {
+    var result = Parser.parseRCS('\
+      $red: #ff0000;\n\
+      $viewColor: $red;\n\
+      \
+      view{\n\
+        color: $viewColor;\n\
+      }\
+      ', this.description);
+
+    var root = result.view;
+    expect(!!root).toBe(true);
+    expect(root.color).toBe('#ff0000');
+  });
+
+  it('can error on duplicate variable definition', function() {
+   var errorMessage;
+
+    try {
+      Parser.parseRCS('\
+      $color: #ffffff;\n\
+      ', this.description);
+    } catch (error) {
+      errorMessage = error.message;
+    }
+
+    expect(errorMessage).toBe('RCS DuplicateVariableDefinition: "$color" has already been defined');
+  });
+
+  it('can use previously defined variables', function() {
+    var result = Parser.parseRCS('\
+      view{\n\
+        color: $viewColor;\n\
+      }\
+      ', this.description);
+
+    var root = result.view;
+    expect(!!root).toBe(true);
+    expect(root.color).toBe('#ff0000');
+  });
+
+  it('can error on reference to undefined variable', function() {
+   var errorMessage;
+
+    try {
+      Parser.parseRCS('\
+      view{\n\
+        color: $viewColor2;\n\
+      }\
+      ', this.description);
+    } catch (error) {
+      errorMessage = error.message;
+    }
+
+    expect(errorMessage).toBe('RCS ReferenceError: "$viewColor2" is not defined');
+  });
+
+  it('can process inline javascirpt', function() {
+    var result = Parser.parseRCS('\
+      view{\n\
+        \
+        ${{\n\
+          var string = "";\n\
+          for (var i = 0; i<2; i++) {\n\
+            string+= ".box" + i + " {width: " + i + "px;\\ncolor: $red;}\\n";\n\
+          }\n\
+          return string;\n\
+        }}$\n\
+      }\
+      ', this.description);
+
+    expect(!!result.view['.box0']).toBe(true);
+    expect(result.view['.box0'].width).toBe('0px');
+    expect(result.view['.box0'].color).toBe('#ff0000');
+    expect(!!result.view['.box1']).toBe(true);
+    expect(result.view['.box1'].width).toBe('1px');
+    expect(result.view['.box1'].color).toBe('#ff0000');
+  });
+
+  it('can process function definitions', function() {
+    var result = Parser.parseRCS('\
+      @define add (a, b) ${{\n\
+        return parseInt(a, 10) + parseInt(b, 10);\n\
+      }}$\n\
+      ', this.description);
+
+    expect(JSON.stringify(result)).toBe('{}');
+  });
+
+  it('can error on duplicate function definitions', function() {
+    var errorMessage;
+
+    try {
+      Parser.parseRCS('\
+        @define add (a, b) ${{\n\
+          return a + b;\n\
+        }}$\n\
+        ', this.description);
+    } catch (error) {
+      errorMessage = error.message;
+    }
+
+    expect(errorMessage).toBe('RCS DuplicateFunctionDefinition: "add" has already been defined');
+  });
+
+  it('can process function definition calls', function() {
+    var result = Parser.parseRCS('\
+      view{\n\
+        width: @add(1,2);\n\
+      }', this.description);
+
+    expect(result.view.width).toBe('3');
+  });
+
+  it('can process inline function calls with variable references', function() {
+    var result = Parser.parseRCS('\
+      $width: 500;\n\
+      view{\n\
+        width: ${this.functions.add(this.variables.width,2)}$;\n\
+      }', this.description);
+
+    expect(result.view.width).toBe('502');
+  });
 });
